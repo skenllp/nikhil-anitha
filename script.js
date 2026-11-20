@@ -164,8 +164,16 @@
 
   async function submitRSVP(data) {
     if (!CONFIG.RSVP_ENDPOINT) return { sent: false, reason: 'no-backend' };
-    const res = await fetch(CONFIG.RSVP_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) });
-    if (!res.ok) throw new Error('Request failed');
+    const res = await fetch(CONFIG.RSVP_ENDPOINT, {
+      method: 'POST', redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(data)
+    });
+    const text = await res.text();
+    let out;
+    try { out = JSON.parse(text); }
+    catch (_) { throw new Error('Endpoint did not return JSON. Check that the Apps Script is deployed with access set to "Anyone". Response began: ' + text.slice(0, 80)); }
+    if (!out.ok) throw new Error('Endpoint rejected the data: ' + (out.error || 'unknown'));
     return { sent: true };
   }
 
@@ -187,7 +195,8 @@
       status.textContent = 'Thank you. Your RSVP has been received.';
       form.reset(); $('#detailFields').classList.remove('is-hidden');
     } catch (err) {
-      status.textContent = 'Your RSVP could not be sent. Please check your connection and try again.';
+      console.error('RSVP error:', err);
+      status.textContent = 'Your RSVP could not be sent. Please try again in a moment.';
     }
   });
 
