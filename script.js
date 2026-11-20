@@ -4,9 +4,9 @@
   /* ---------- CONFIG ---------- */
   const CONFIG = {
     // Set to a secure endpoint (e.g. a Google Apps Script web app URL) to enable RSVP delivery.
-    RSVP_ENDPOINT: '',
+    RSVP_ENDPOINT: 'https://script.google.com/macros/s/AKfycbyQ9TfS0aXGtpU6CGWkZyF-Nl_wZ_cGFI7gDKoO7P6U1U15qxF8kpWZV4ks7qratkLn/exec',
     // Set to e.g. 'assets/music.mp3' once a music file is supplied. The toggle stays hidden until then.
-    MUSIC_SRC: '',
+    MUSIC_SRC: 'assets/music.m4a',
     WEDDING_ISO: '2027-01-14T10:30:00+05:30',
     SHARE: { title: 'Nikhil & Anithamol | Wedding Invitation', text: 'You are invited to the wedding of Nikhil & Anithamol on 14 January 2027.' }
   };
@@ -208,15 +208,21 @@
 
   $('#toTop').addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); });
 
-  /* ---------- MUSIC (hidden until a file is supplied; starts only on tap) ---------- */
+  /* ---------- MUSIC (starts only after a tap: the opening button or the toggle) ---------- */
   const mBtn = $('#musicBtn'), audio = $('#bgMusic');
+  function setMusic(on) {
+    if (!CONFIG.MUSIC_SRC) return;
+    if (on) {
+      audio.play().then(() => paint(true)).catch(() => paint(false));
+    } else { audio.pause(); paint(false); }
+  }
+  function paint(on) {
+    mBtn.setAttribute('aria-pressed', String(on));
+    mBtn.setAttribute('aria-label', on ? 'Pause music' : 'Play music');
+  }
   if (CONFIG.MUSIC_SRC) {
-    audio.src = CONFIG.MUSIC_SRC; mBtn.hidden = false;
-    mBtn.addEventListener('click', () => {
-      const on = mBtn.getAttribute('aria-pressed') === 'true';
-      if (on) audio.pause(); else audio.play().catch(() => {});
-      mBtn.setAttribute('aria-pressed', String(!on));
-      mBtn.setAttribute('aria-label', on ? 'Play music' : 'Pause music');
-    });
+    audio.src = CONFIG.MUSIC_SRC; audio.volume = 0.6; mBtn.hidden = false;
+    mBtn.addEventListener('click', () => setMusic(audio.paused));
+    $('#openBtn').addEventListener('click', () => setMusic(true));
   }
 })();

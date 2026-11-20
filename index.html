@@ -6,17 +6,19 @@
 <title>Nikhil &amp; Anithamol | Wedding Invitation</title>
 <meta name="description" content="With God’s grace and the blessings of our families, we invite you to celebrate the wedding of Nikhil Jose and Anithamol Peter on 14 January 2027.">
 <meta name="theme-color" content="#F7F3EA">
-<!-- OG image placeholder: add a real 1200×630 file at assets/og-image.jpg and use its absolute URL after deployment. WhatsApp previews are not complete until then. -->
+<link rel="canonical" href="https://nikhil-anitha.vercel.app/">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://nikhil-anitha.vercel.app/">
+<meta property="og:image:alt" content="Nikhil &amp; Anithamol, 14 January 2027">
 <meta property="og:title" content="Nikhil &amp; Anithamol | Wedding Invitation">
 <meta property="og:description" content="With God’s grace and the blessings of our families, we invite you to celebrate the wedding of Nikhil Jose and Anithamol Peter on 14 January 2027.">
-<meta property="og:image" content="assets/og-image.jpg">
+<meta property="og:image" content="https://nikhil-anitha.vercel.app/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Nikhil &amp; Anithamol | Wedding Invitation">
 <meta name="twitter:description" content="Join us on 14 January 2027 as we begin our forever.">
-<meta name="twitter:image" content="assets/og-image.jpg">
+<meta name="twitter:image" content="https://nikhil-anitha.vercel.app/assets/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
@@ -29,7 +31,7 @@
   <video id="openingVideo" class="opening__video" src="assets/opening.mp4#t=0.1" muted playsinline preload="auto"></video>
   <div id="openingOverlay" class="opening__overlay">
     <p class="opening__mono">N <span>&amp;</span> A</p>
-    <button id="openBtn" class="btn btn--solid" type="button">Open Our Invitation</button>
+    <button id="openBtn" class="btn btn--solid" type="button">Open Invitation</button>
   </div>
   <button id="skipBtn" class="opening__skip" type="button">Skip</button>
 </div>
@@ -60,7 +62,7 @@
 </section>
 
 <!-- 3. VERSE -->
-<section class="verse" id="verse">
+<section class="verse page" id="verse">
   <div class="verse__bg" data-parallax aria-hidden="true"></div>
   <div class="wrap narrow center">
     <blockquote class="verse__quote" data-reveal>“Love never fails.”</blockquote>
@@ -71,7 +73,7 @@
 </section>
 
 <!-- 4. BRIDE & GROOM -->
-<section class="couple paper" id="couple" style="--bgpos:center top">
+<section class="couple paper page" id="couple" style="--bgpos:center top">
   <div class="wrap center">
     <h2 class="title" data-reveal>Two Hearts, One Promise</h2>
     <span class="gold-line" data-line aria-hidden="true"></span>
@@ -94,13 +96,14 @@
 </section>
 
 <!-- 5. CELEBRATIONS -->
-<section class="events" id="celebrations">
-  <div class="wrap center">
+<div class="events" id="celebrations">
+  <section class="page"><div class="wrap center">
     <h2 class="title" data-reveal>Our Celebrations</h2>
     <span class="gold-line" data-line aria-hidden="true"></span>
-  </div>
+    <p class="event__desc" data-reveal>Three days of blessings: 11, 12 and 14 January 2027.</p>
+  </div></section>
 
-  <article class="event wrap">
+  <section class="page"><article class="event wrap">
     <div class="event__media frame frame--arch" data-reveal>
       <video data-autovideo src="assets/engagement.mp4" muted loop playsinline preload="metadata" aria-label="Engagement video"></video>
     </div>
@@ -111,9 +114,9 @@
       <p class="event__extra">Followed by Reception at Church Parish Hall.</p>
       <a class="btn" href="https://share.google/3c1I5vXT3Np3pLueB" target="_blank" rel="noopener noreferrer">Get Directions</a>
     </div>
-  </article>
+  </article></section>
 
-  <article class="event event--flip wrap">
+  <section class="page"><article class="event event--flip wrap">
     <div class="event__media frame frame--soft" data-reveal>
       <img class="kenburns" src="assets/chanthamcharthal.png" alt="Brass lamp, ceremonial bowl and gold-bordered cloth" loading="lazy" width="941" height="1672">
       <span class="glow" aria-hidden="true"></span>
@@ -124,9 +127,9 @@
       <p class="event__desc">A cherished celebration of family, tradition and blessings.</p>
       <a class="btn" href="https://share.google/0jLpBEZ9mTx78T9Vl" target="_blank" rel="noopener noreferrer">Get Directions</a>
     </div>
-  </article>
+  </article></section>
 
-  <article class="event wrap">
+  <section class="page"><article class="event wrap">
     <div class="event__media frame frame--phone" data-reveal>
       <video data-autovideo src="assets/wedding.mp4" muted loop playsinline preload="metadata" aria-label="Wedding invitation artwork video"></video>
     </div>
@@ -136,11 +139,11 @@
       <p class="event__desc">United in love and blessed by faith, as we begin our journey together.</p>
       <a class="btn" href="https://share.google/nNH5E4ygvznROWcxG" target="_blank" rel="noopener noreferrer">Get Directions</a>
     </div>
-  </article>
-</section>
+  </article></section>
+</div>
 
 <!-- 6. SAVE THE DATE -->
-<section class="std" id="save-the-date">
+<section class="std page" id="save-the-date">
   <div class="std__bg" data-parallax aria-hidden="true"></div>
   <div class="std__content center">
     <h2 class="title" data-reveal>Save the Date</h2>
@@ -162,7 +165,7 @@
 </section>
 
 <!-- 7. FAMILIES -->
-<section class="families paper" id="families" style="--bgpos:center 35%">
+<section class="families paper page" id="families" style="--bgpos:center 35%">
   <div class="wrap center">
     <h2 class="title" data-reveal>With the Blessings of Our Families</h2>
     <span class="gold-line" data-line aria-hidden="true"></span>
@@ -183,7 +186,7 @@
 </section>
 
 <!-- 8. VENUES -->
-<section class="venues paper" id="venues" style="--bgpos:center 60%">
+<section class="venues paper page" id="venues" style="--bgpos:center 60%">
   <div class="wrap center">
     <h2 class="title" data-reveal>Venues</h2>
     <span class="gold-line" data-line aria-hidden="true"></span>
@@ -208,7 +211,7 @@
 </section>
 
 <!-- 9. RSVP -->
-<section class="rsvp paper" id="rsvp" style="--bgpos:center bottom">
+<section class="rsvp paper page" id="rsvp" style="--bgpos:center bottom">
   <div class="wrap narrow center">
     <h2 class="title" data-reveal>The Joy of Your Presence</h2>
     <span class="gold-line" data-line aria-hidden="true"></span>
@@ -252,7 +255,7 @@
 </section>
 
 <!-- 10. FINAL -->
-<section class="final" id="final">
+<section class="final page" id="final">
   <div class="final__bg" data-parallax aria-hidden="true"></div>
   <div class="final__content center">
     <p class="final__line" data-reveal>And so, our forever begins…</p>
