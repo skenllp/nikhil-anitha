@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nikhil &amp; Anithamol | Wedding Invitation</title>
+<meta name="description" content="With God’s grace and the blessings of our families, we invite you to celebrate the wedding of Nikhil Jose and Anithamol Peter on 14 January 2027.">
+<meta name="theme-color" content="#F7F3EA">
+<!-- OG image placeholder: add a real 1200×630 file at assets/og-image.jpg and use its absolute URL after deployment. WhatsApp previews are not complete until then. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nikhil &amp; Anithamol | Wedding Invitation">
+<meta property="og:description" content="With God’s grace and the blessings of our families, we invite you to celebrate the wedding of Nikhil Jose and Anithamol Peter on 14 January 2027.">
+<meta property="og:image" content="assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Nikhil &amp; Anithamol | Wedding Invitation">
+<meta name="twitter:description" content="Join us on 14 January 2027 as we begin our forever.">
+<meta name="twitter:image" content="assets/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+
+<!-- 1. OPENING -->
+<div id="opening" class="opening" role="dialog" aria-label="Invitation opening">
+  <video id="openingVideo" class="opening__video" src="assets/opening.mp4#t=0.1" muted playsinline preload="auto"></video>
+  <div id="openingOverlay" class="opening__overlay">
+    <p class="opening__mono">N <span>&amp;</span> A</p>
+    <button id="openBtn" class="btn btn--solid" type="button">Open Our Invitation</button>
+  </div>
+  <button id="skipBtn" class="opening__skip" type="button">Skip</button>
+</div>
+
+<button id="musicBtn" class="music" type="button" aria-label="Play music" aria-pressed="false" hidden>♪</button>
+<audio id="bgMusic" loop preload="none"></audio>
+
+<main id="top">
+
+<!-- 2. HERO -->
+<section class="hero" id="hero">
+  <div class="hero__bg" aria-hidden="true">
+    <img class="hero__fill" src="assets/hero-bible.png" alt="">
+    <img class="hero__img" src="assets/hero-bible.png" alt="" fetchpriority="high">
+  </div>
+  <div class="hero__content">
+    <p class="hero__grace">With God’s Grace</p>
+    <h1 class="hero__names" aria-label="Nikhil and Anithamol">
+      <span class="hn">Nikhil</span>
+      <span class="hn hero__amp">&amp;</span>
+      <span class="hn">Anithamol</span>
+    </h1>
+    <span class="gold-line hn" aria-hidden="true"></span>
+    <p class="hero__theme hn">The Promise of Forever</p>
+    <p class="hero__date hn">14 January 2027</p>
+  </div>
+  <a class="scroll-ind" href="#verse" aria-label="Scroll down"><span></span></a>
+</section>
+
+<!-- 3. VERSE -->
+<section class="verse" id="verse">
+  <div class="verse__bg" data-parallax aria-hidden="true"></div>
+  <div class="wrap narrow center">
+    <blockquote class="verse__quote" data-reveal>“Love never fails.”</blockquote>
+    <p class="verse__ref" data-reveal>— 1 Corinthians 13:8</p>
+    <span class="gold-line" data-line aria-hidden="true"></span>
+    <p class="verse__text" data-reveal>With grateful hearts and the blessings of our families, we joyfully invite you to celebrate the beginning of our forever.</p>
+  </div>
+</section>
+
+<!-- 4. BRIDE & GROOM -->
+<section class="couple paper" id="couple" style="--bgpos:center top">
+  <div class="wrap center">
+    <h2 class="title" data-reveal>Two Hearts, One Promise</h2>
+    <span class="gold-line" data-line aria-hidden="true"></span>
+    <div class="couple__grid">
+      <article class="person" data-reveal>
+        <h3 class="person__name">Nikhil Jose</h3>
+        <p class="small">Beloved son of</p>
+        <p class="person__parents">Mr. Jose Chacko<br>&amp; Mrs. Molly Thommen</p>
+        <p class="person__place">Puliyanal<br>Karimkunnam, Thodupuzha</p>
+      </article>
+      <div class="couple__amp" aria-hidden="true">&amp;</div>
+      <article class="person" data-reveal>
+        <h3 class="person__name">Anithamol Peter</h3>
+        <p class="small">Beloved daughter of</p>
+        <p class="person__parents">Mr. Peter K. U.<br>&amp; Mrs. Mini Peter</p>
+        <p class="person__place">Kalarickamyalil<br>Cherukara, Kottayam</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 5. CELEBRATIONS -->
+<section class="events" id="celebrations">
+  <div class="wrap center">
+    <h2 class="title" data-reveal>Our Celebrations</h2>
+    <span class="gold-line" data-line aria-hidden="true"></span>
+  </div>
+
+  <article class="event wrap">
+    <div class="event__media frame frame--arch" data-reveal>
+      <video data-autovideo src="assets/engagement.mp4" muted loop playsinline preload="metadata" aria-label="Engagement video"></video>
+    </div>
+    <div class="event__text" data-reveal>
+      <h3 class="event__title">Engagement &amp; Mylanchy</h3>
+      <p class="event__when">Monday, 11 January 2027<br>5:30 PM</p>
+      <p class="event__desc">A beautiful beginning, surrounded by love, blessings and cherished traditions.</p>
+      <p class="event__extra">Followed by Reception at Church Parish Hall.</p>
+      <a class="btn" href="https://share.google/3c1I5vXT3Np3pLueB" target="_blank" rel="noopener noreferrer">Get Directions</a>
+    </div>
+  </article>
+
+  <article class="event event--flip wrap">
+    <div class="event__media frame frame--soft" data-reveal>
+      <img class="kenburns" src="assets/chanthamcharthal.png" alt="Brass lamp, ceremonial bowl and gold-bordered cloth" loading="lazy" width="941" height="1672">
+      <span class="glow" aria-hidden="true"></span>
+    </div>
+    <div class="event__text" data-reveal>
+      <h3 class="event__title">Chanthamcharthal</h3>
+      <p class="event__when">Tuesday, 12 January 2027<br>6:00 PM</p>
+      <p class="event__desc">A cherished celebration of family, tradition and blessings.</p>
+      <a class="btn" href="https://share.google/0jLpBEZ9mTx78T9Vl" target="_blank" rel="noopener noreferrer">Get Directions</a>
+    </div>
+  </article>
+
+  <article class="event wrap">
+    <div class="event__media frame frame--phone" data-reveal>
+      <video data-autovideo src="assets/wedding.mp4" muted loop playsinline preload="metadata" aria-label="Wedding invitation artwork video"></video>
+    </div>
+    <div class="event__text" data-reveal>
+      <h3 class="event__title">Holy Matrimony</h3>
+      <p class="event__when">Thursday, 14 January 2027<br>10:30 AM</p>
+      <p class="event__desc">United in love and blessed by faith, as we begin our journey together.</p>
+      <a class="btn" href="https://share.google/nNH5E4ygvznROWcxG" target="_blank" rel="noopener noreferrer">Get Directions</a>
+    </div>
+  </article>
+</section>
+
+<!-- 6. SAVE THE DATE -->
+<section class="std" id="save-the-date">
+  <div class="std__bg" data-parallax aria-hidden="true"></div>
+  <div class="std__content center">
+    <h2 class="title" data-reveal>Save the Date</h2>
+    <div class="std__date" data-reveal>
+      <span class="std__day">14</span>
+      <span class="std__month">January</span>
+      <span class="std__year">2027</span>
+      <span class="std__wd">Thursday</span>
+    </div>
+    <div id="countdown" class="countdown" role="timer" aria-label="Countdown to the wedding">
+      <div><b id="cd-d">--</b><span>Days</span></div>
+      <div><b id="cd-h">--</b><span>Hours</span></div>
+      <div><b id="cd-m">--</b><span>Minutes</span></div>
+      <div><b id="cd-s">--</b><span>Seconds</span></div>
+    </div>
+    <p id="cd-done" class="small" hidden>Today is the day. God bless!</p>
+    <button id="calBtn" class="btn btn--solid" type="button">Add to Calendar</button>
+  </div>
+</section>
+
+<!-- 7. FAMILIES -->
+<section class="families paper" id="families" style="--bgpos:center 35%">
+  <div class="wrap center">
+    <h2 class="title" data-reveal>With the Blessings of Our Families</h2>
+    <span class="gold-line" data-line aria-hidden="true"></span>
+    <div class="couple__grid">
+      <div class="fam" data-reveal>
+        <h3>Groom’s Family</h3>
+        <p class="fam__names">Mr. Jose Chacko &amp; Mrs. Molly Thommen</p>
+        <p class="small">Puliyanal, Karimkunnam, Thodupuzha</p>
+      </div>
+      <div class="couple__amp" aria-hidden="true">✝</div>
+      <div class="fam" data-reveal>
+        <h3>Bride’s Family</h3>
+        <p class="fam__names">Mr. Peter K. U. &amp; Mrs. Mini Peter</p>
+        <p class="small">Kalarickamyalil, Cherukara, Kottayam</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. VENUES -->
+<section class="venues paper" id="venues" style="--bgpos:center 60%">
+  <div class="wrap center">
+    <h2 class="title" data-reveal>Venues</h2>
+    <span class="gold-line" data-line aria-hidden="true"></span>
+    <div class="venues__grid">
+      <div class="vcard" data-reveal>
+        <h3>Engagement &amp; Mylanchy</h3>
+        <p>Monday, 11 January 2027<br>5:30 PM</p>
+        <a class="btn" href="https://share.google/3c1I5vXT3Np3pLueB" target="_blank" rel="noopener noreferrer">Open in Maps</a>
+      </div>
+      <div class="vcard" data-reveal>
+        <h3>Chanthamcharthal</h3>
+        <p>Tuesday, 12 January 2027<br>6:00 PM</p>
+        <a class="btn" href="https://share.google/0jLpBEZ9mTx78T9Vl" target="_blank" rel="noopener noreferrer">Open in Maps</a>
+      </div>
+      <div class="vcard" data-reveal>
+        <h3>Holy Matrimony</h3>
+        <p>Thursday, 14 January 2027<br>10:30 AM</p>
+        <a class="btn" href="https://share.google/nNH5E4ygvznROWcxG" target="_blank" rel="noopener noreferrer">Open in Maps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. RSVP -->
+<section class="rsvp paper" id="rsvp" style="--bgpos:center bottom">
+  <div class="wrap narrow center">
+    <h2 class="title" data-reveal>The Joy of Your Presence</h2>
+    <span class="gold-line" data-line aria-hidden="true"></span>
+    <form id="rsvpForm" class="form" novalidate data-reveal>
+      <div class="field">
+        <label for="guestName">Guest name</label>
+        <input id="guestName" name="name" type="text" autocomplete="name" required>
+        <small class="err" data-err="name"></small>
+      </div>
+      <fieldset class="field">
+        <legend>Will you attend?</legend>
+        <div class="choices">
+          <label><input type="radio" name="attendance" value="Yes"> <span>Joyfully accept</span></label>
+          <label><input type="radio" name="attendance" value="No"> <span>Regretfully decline</span></label>
+        </div>
+        <small class="err" data-err="attendance"></small>
+      </fieldset>
+      <div class="field" id="detailFields">
+        <label for="guestCount">Number of guests</label>
+        <input id="guestCount" name="guests" type="number" min="1" max="10" inputmode="numeric" value="1">
+        <small class="err" data-err="guests"></small>
+        <fieldset class="field">
+          <legend>Events attending</legend>
+          <div class="choices choices--col">
+            <label><input type="checkbox" name="events" value="Engagement &amp; Mylanchy"> <span>Engagement &amp; Mylanchy (11 Jan)</span></label>
+            <label><input type="checkbox" name="events" value="Chanthamcharthal"> <span>Chanthamcharthal (12 Jan)</span></label>
+            <label><input type="checkbox" name="events" value="Holy Matrimony"> <span>Holy Matrimony (14 Jan)</span></label>
+          </div>
+          <small class="err" data-err="events"></small>
+        </fieldset>
+      </div>
+      <div class="field">
+        <label for="wishes">Wishes or message</label>
+        <textarea id="wishes" name="message" rows="4" maxlength="600"></textarea>
+      </div>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
+      <button class="btn btn--solid" type="submit">Send RSVP</button>
+      <p id="formStatus" class="status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<!-- 10. FINAL -->
+<section class="final" id="final">
+  <div class="final__bg" data-parallax aria-hidden="true"></div>
+  <div class="final__content center">
+    <p class="final__line" data-reveal>And so, our forever begins…</p>
+    <h2 class="final__names" data-reveal>Nikhil &amp; Anithamol</h2>
+    <p class="final__date" data-reveal>14.01.2027</p>
+    <p class="final__love" data-reveal>With Love &amp; Blessings</p>
+    <div class="final__actions">
+      <button id="shareBtn" class="btn btn--solid" type="button">Share Invitation</button>
+      <a class="btn" href="#top" id="toTop">Back to Top</a>
+      <button id="replayBtn" class="btn" type="button">Replay Opening</button>
+    </div>
+    <p id="shareStatus" class="status" role="status" aria-live="polite"></p>
+  </div>
+</section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
