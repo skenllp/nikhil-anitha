@@ -3,11 +3,18 @@
 
   /* ---------- CONFIG ---------- */
   const CONFIG = {
-    // Set to a secure endpoint (e.g. a Google Apps Script web app URL) to enable RSVP delivery.
     RSVP_ENDPOINT: 'https://script.google.com/macros/s/AKfycbyQ9TfS0aXGtpU6CGWkZyF-Nl_wZ_cGFI7gDKoO7P6U1U15qxF8kpWZV4ks7qratkLn/exec',
-    // Set to e.g. 'assets/music.mp3' once a music file is supplied. The toggle stays hidden until then.
+    RSVP_TIMEOUT_MS: 20000,
     MUSIC_SRC: 'assets/music.m4a',
     WEDDING_ISO: '2027-01-14T10:30:00+05:30',
+    // Start times are confirmed. End times are NOT confirmed by the families:
+    // calendar entries use a provisional 2-hour duration and say so in the description.
+    PROVISIONAL_DURATION_MIN: 120,
+    EVENTS: [
+      { title: 'Engagement & Mylanchy', start: '2027-01-11T17:30:00+05:30', note: 'Followed by Reception at Church Parish Hall.', map: 'https://share.google/3c1I5vXT3Np3pLueB' },
+      { title: 'Chanthamcharthal', start: '2027-01-12T18:00:00+05:30', note: 'A celebration of family, tradition and blessings.', map: 'https://share.google/0jLpBEZ9mTx78T9Vl' },
+      { title: 'Holy Matrimony: Nikhil & Anithamol', start: '2027-01-14T10:30:00+05:30', note: 'United in love and blessed by faith.', map: 'https://share.google/nNH5E4ygvznROWcxG' }
+    ],
     SHARE: { title: 'Nikhil & Anithamol | Wedding Invitation', text: 'You are invited to the wedding of Nikhil & Anithamol on 14 January 2027.' }
   };
 
@@ -15,198 +22,248 @@
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hasGsap = typeof window.gsap !== 'undefined';
-  if (hasGsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+  const hasST = hasGsap && typeof window.ScrollTrigger !== 'undefined';
+  if (hasST) gsap.registerPlugin(ScrollTrigger);
+  const animate = hasGsap && !reduced;
 
-  const body = document.body;
+  const body = document.body, main = $('#main') || $('main');
   const opening = $('#opening'), ov = $('#openingVideo'), overlay = $('#openingOverlay');
-  let openingDone = false, started = false, fallbackTimer;
+  let openingDone = false, started = false, timers = [];
 
-  /* ---------- HERO INTRO ---------- */
-  if (hasGsap && !reduced) gsap.set('.hn,.hero__grace', { opacity: 0, y: 28 });
-
-  function playHero() {
-    if (!hasGsap || reduced) return;
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.to('.hero__grace', { opacity: 1, y: 0, duration: 1 })
-      .to('.hn', { opacity: 1, y: 0, duration: 1.3, stagger: 0.28 }, '-=0.5');
-    gsap.fromTo('.hero__img', { scale: 1.06 }, { scale: 1, duration: 3, ease: 'power2.out' });
+  /* ---------- HERO: split names into letters, set hidden start state ---------- */
+  $$('[data-split]').forEach(el => {
+    const txt = el.textContent; el.textContent = '';
+    [...txt].forEach(c => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; el.appendChild(s); });
+  });
+  const heroHidden = '.hero__grace,.hero__amp,.hero__theme,.hero__date,.scroll-ind,.ch';
+  function resetHero() {
+    if (!animate) return;
+    gsap.set(heroHidden, { opacity: 0, y: 26 });
+    gsap.set('.hero__line', { scaleX: 0, opacity: 1 });
+    gsap.set('.hero__img', { scale: 1.07 });
   }
+  function playHero(delay = 0) {
+    if (!animate) return;
+    const tl = gsap.timeline({ delay, defaults: { ease: 'power3.out' } });
+    tl.to('.hero__img', { scale: 1, duration: 3.2, ease: 'power2.out' }, 0)
+      .to('.hero__grace', { opacity: 1, y: 0, duration: 1 }, 0.1)
+      .to('.hn:first-of-type .ch', { opacity: 1, y: 0, duration: 1.1, stagger: 0.07 }, 0.4)
+      .to('.hero__amp', { opacity: 1, y: 0, duration: 1 }, 0.95)
+      .to('.hn:last-of-type .ch', { opacity: 1, y: 0, duration: 1.1, stagger: 0.06 }, 1.1)
+      .to('.hero__line', { scaleX: 1, duration: 1.2, ease: 'power2.inOut' }, 1.9)
+      .to('.hero__theme', { opacity: 1, y: 0, duration: 1 }, 2.1)
+      .to('.hero__date', { opacity: 1, y: 0, duration: 1 }, 2.35)
+      .to('.scroll-ind', { opacity: 1, y: 0, duration: 1 }, 2.9);
+  }
+  resetHero();
+  if (main) main.inert = true; // keyboard focus stays on the opening until it ends
 
   /* ---------- OPENING ---------- */
   function finishOpening() {
     if (openingDone) return;
     openingDone = true;
-    clearTimeout(fallbackTimer);
+    timers.forEach(clearTimeout); timers = [];
+    window.scrollTo(0, 0);
     const done = () => {
       opening.style.display = 'none';
       body.classList.remove('locked');
-      ov.pause();
-      if (hasGsap && window.ScrollTrigger) ScrollTrigger.refresh();
-      playHero();
+      if (main) { main.inert = false; main.focus({ preventScroll: true }); }
+      try { ov.pause(); } catch (_) {}
+      if (hasST) ScrollTrigger.refresh();
     };
-    window.scrollTo(0, 0);
-    if (hasGsap && !reduced) gsap.to(opening, { opacity: 0, duration: 1.4, ease: 'power2.inOut', onComplete: done });
+    // Hero sits beneath the opening: names begin rising while the doors dissolve, so there is never a blank or black frame.
+    playHero(animate ? 0.35 : 0);
+    if (animate) gsap.to(opening, { opacity: 0, duration: 1.5, ease: 'power2.inOut', onComplete: done });
     else done();
   }
 
   function startOpening() {
     if (started) return;
     started = true;
-    if (hasGsap && !reduced) gsap.to(overlay, { opacity: 0, duration: 0.7, onComplete: () => (overlay.style.display = 'none') });
+    if (animate) gsap.to(overlay, { opacity: 0, duration: 0.7, onComplete: () => (overlay.style.display = 'none') });
     else overlay.style.display = 'none';
-    ov.play().then(() => {
-      fallbackTimer = setTimeout(finishOpening, ((ov.duration || 10) * 1000) + 2000);
+    let p;
+    try { p = ov.play(); } catch (_) { finishOpening(); return; }
+    (p || Promise.resolve()).then(() => {
+      // watchdogs: stalled video, or never-ending video
+      timers.push(setTimeout(() => { if (ov.currentTime < 0.2) finishOpening(); }, 6000));
+      timers.push(setTimeout(finishOpening, ((ov.duration || 12) * 1000) + 3000));
     }).catch(finishOpening);
   }
 
-  ov.addEventListener('timeupdate', () => {
-    if (ov.duration && ov.currentTime >= ov.duration - 1.1) finishOpening();
-  });
+  ov.addEventListener('timeupdate', () => { if (started && ov.duration && ov.currentTime >= ov.duration - 1.3) finishOpening(); });
   ov.addEventListener('ended', finishOpening);
-  ov.addEventListener('error', () => { if (started) finishOpening(); });
+  ov.addEventListener('error', () => { if (started) finishOpening(); }); // before click: poster stays, click then skips ahead
   $('#openBtn').addEventListener('click', startOpening);
-  $('#skipBtn').addEventListener('click', finishOpening);
+  $('#skipBtn').addEventListener('click', () => { started = true; finishOpening(); });
 
-  function replayOpening() {
+  $('#replayBtn').addEventListener('click', () => {
     openingDone = false; started = false;
     window.scrollTo(0, 0);
     body.classList.add('locked');
-    ov.pause(); ov.currentTime = 0.1;
+    if (main) main.inert = true;
+    try { ov.pause(); ov.currentTime = 0; } catch (_) {}
     overlay.style.display = ''; overlay.style.opacity = 1;
     opening.style.display = ''; opening.style.opacity = 1;
-    if (hasGsap && !reduced) gsap.set('.hn,.hero__grace', { opacity: 0, y: 28 });
-  }
-  $('#replayBtn').addEventListener('click', replayOpening);
+    resetHero();
+    $('#openBtn').focus({ preventScroll: true });
+  });
 
   /* ---------- SCROLL ANIMATIONS ---------- */
-  if (hasGsap && window.ScrollTrigger && !reduced) {
-    $$('[data-reveal]').forEach(el => {
-      gsap.from(el, { opacity: 0, y: 34, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
-    });
-    $$('[data-line]').forEach(el => {
-      gsap.from(el, { scaleX: 0, opacity: 0, duration: 1.2, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%', once: true } });
-    });
-    $$('[data-parallax]').forEach(el => {
-      gsap.fromTo(el, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } });
-    });
-    $$('.frame').forEach(el => {
-      gsap.from(el, { clipPath: 'inset(8% 8% 8% 8%)', duration: 1.4, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
-    });
-  }
+  if (hasST && animate) {
+    const once = (trigger, start = 'top 88%') => ({ trigger, start, once: true });
+    $$('[data-reveal]').forEach(el => gsap.from(el, { opacity: 0, y: 30, duration: 1.1, ease: 'power3.out', scrollTrigger: once(el) }));
+    $$('[data-line]').forEach(el => gsap.from(el, { scaleX: 0, opacity: 0, duration: 1.2, ease: 'power2.out', scrollTrigger: once(el, 'top 92%') }));
 
-  /* ---------- VIDEO VISIBILITY ---------- */
+    // Chapters: each enters differently, same easing family and timing
+    $$('.chapter').forEach(ch => {
+      const media = $('.chapter__media', ch), kids = [...$('.chapter__text', ch).children];
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, scrollTrigger: once(ch, 'top 68%') });
+      if (ch.classList.contains('chapter--engage')) tl.from(media, { opacity: 0, y: 70, duration: 1.4 });
+      else if (ch.classList.contains('chapter--chantham')) tl.from(media, { opacity: 0, scale: 0.94, duration: 1.5 });
+      else tl.from(media, { opacity: 0, y: 40, duration: 1.3 });
+      tl.from(kids, { opacity: 0, y: 26, duration: 0.9, stagger: 0.11 }, '-=0.9');
+    });
+
+    // Subtle parallax: transform-only, scrubbed, small range, desktop and mobile alike
+    $$('[data-parallax]').forEach(el => gsap.fromTo(el, { yPercent: -4 }, { yPercent: 4, ease: 'none', force3D: true, scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
+    gsap.to('.hero__img', { yPercent: 5, ease: 'none', force3D: true, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to('.hero__content', { y: -36, opacity: 0.2, ease: 'none', scrollTrigger: { trigger: '#hero', start: '30% top', end: 'bottom top', scrub: true } });
+  }
+  window.addEventListener('load', () => { if (hasST) ScrollTrigger.refresh(); });
+
+  /* ---------- VIDEO: lazy start, pause offscreen/hidden, tap to toggle if autoplay is blocked ---------- */
   const vids = $$('video[data-autovideo]');
   if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        const v = e.target;
-        if (e.isIntersecting) v.play().catch(() => {});
-        else v.pause();
-      });
-    }, { threshold: 0.35 });
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      const v = e.target;
+      if (e.isIntersecting && !document.hidden) v.play().catch(() => {}); else v.pause();
+    }), { threshold: 0.3, rootMargin: '80px 0px' });
     vids.forEach(v => io.observe(v));
-  } else vids.forEach(v => v.play().catch(() => {}));
+  }
+  document.addEventListener('visibilitychange', () => { if (document.hidden) vids.forEach(v => v.pause()); });
+  vids.forEach(v => v.addEventListener('click', () => (v.paused ? v.play().catch(() => {}) : v.pause())));
 
   /* ---------- COUNTDOWN ---------- */
   const target = new Date(CONFIG.WEDDING_ISO).getTime();
   const pad = n => String(n).padStart(2, '0');
+  const cd = { d: $('#cd-d'), h: $('#cd-h'), m: $('#cd-m'), s: $('#cd-s') };
   function tick() {
-    let diff = Math.max(0, target - Date.now());
-    const d = Math.floor(diff / 864e5); diff %= 864e5;
-    const h = Math.floor(diff / 36e5); diff %= 36e5;
-    const m = Math.floor(diff / 6e4); const s = Math.floor((diff % 6e4) / 1e3);
-    $('#cd-d').textContent = d; $('#cd-h').textContent = pad(h);
-    $('#cd-m').textContent = pad(m); $('#cd-s').textContent = pad(s);
-    if (target - Date.now() <= 0) { $('#countdown').hidden = true; $('#cd-done').hidden = false; clearInterval(timer); }
+    const left = Math.max(0, target - Date.now());
+    cd.d.textContent = Math.floor(left / 864e5);
+    cd.h.textContent = pad(Math.floor(left % 864e5 / 36e5));
+    cd.m.textContent = pad(Math.floor(left % 36e5 / 6e4));
+    cd.s.textContent = pad(Math.floor(left % 6e4 / 1e3));
+    if (left === 0) { $('#countdown').hidden = true; $('#cd-done').hidden = false; clearInterval(timer); }
   }
   const timer = setInterval(tick, 1000); tick();
 
-  /* ---------- CALENDAR (ICS, times converted from IST to UTC) ---------- */
+  /* ---------- CALENDAR (ICS) ---------- */
+  const icsDate = d => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const icsEsc = t => String(t).replace(/\\/g, '\\\\').replace(/[,;]/g, '\\$&').replace(/\r?\n/g, '\\n');
+  function buildICS() {
+    const stamp = icsDate(new Date());
+    const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Nikhil and Anithamol//Wedding//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+    CONFIG.EVENTS.forEach((e, i) => {
+      const s = new Date(e.start), en = new Date(s.getTime() + CONFIG.PROVISIONAL_DURATION_MIN * 6e4);
+      L.push('BEGIN:VEVENT', `UID:nikhil-anithamol-${i}-20270114@nikhil-anitha.vercel.app`, `DTSTAMP:${stamp}`,
+        `DTSTART:${icsDate(s)}`, `DTEND:${icsDate(en)}`, `SUMMARY:${icsEsc(e.title)}`,
+        `DESCRIPTION:${icsEsc(`${e.note}\nDirections: ${e.map}\nNote: the end time is provisional; the start time is confirmed.`)}`,
+        `URL:${e.map}`, 'END:VEVENT');
+    });
+    L.push('END:VCALENDAR');
+    return L.join('\r\n');
+  }
   $('#calBtn').addEventListener('click', () => {
-    const ev = [
-      ['Engagement & Mylanchy', '20270111T120000Z', '20270111T150000Z', 'Reception at Church Parish Hall follows.'],
-      ['Chanthamcharthal', '20270112T123000Z', '20270112T153000Z', 'Family celebration and blessings.'],
-      ['Wedding of Nikhil & Anithamol: Holy Matrimony', '20270114T050000Z', '20270114T080000Z', 'Holy Matrimony. Love never fails.']
-    ];
-    const esc = t => t.replace(/[,;]/g, m => '\\' + m);
-    const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Nikhil and Anithamol//Wedding//EN', 'CALSCALE:GREGORIAN'];
-    ev.forEach((e, i) => lines.push('BEGIN:VEVENT', `UID:nikhil-anithamol-${i}@wedding.invite`, 'DTSTAMP:20261120T000000Z',
-      `DTSTART:${e[1]}`, `DTEND:${e[2]}`, `SUMMARY:${esc(e[0])}`, `DESCRIPTION:${esc(e[3])}`, 'END:VEVENT'));
-    lines.push('END:VCALENDAR');
-    const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob); a.download = 'nikhil-anithamol-wedding.ics';
+    const url = URL.createObjectURL(new Blob([buildICS()], { type: 'text/calendar;charset=utf-8' }));
+    const a = Object.assign(document.createElement('a'), { href: url, download: 'nikhil-anithamol-wedding.ics' });
     document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
   });
 
   /* ---------- RSVP ---------- */
-  const form = $('#rsvpForm'), status = $('#formStatus');
-  const setErr = (k, msg) => { const el = $(`[data-err="${k}"]`); if (el) el.textContent = msg || ''; };
-  const attVal = () => (form.querySelector('input[name="attendance"]:checked') || {}).value;
+  const F = {
+    form: $('#rsvpForm'), name: $('#guestName'), guests: $('#guestCount'), wishes: $('#wishes'),
+    hp: $('#hpField'), details: $('#detailFields'), btn: $('#rsvpBtn'), status: $('#formStatus'),
+    att: () => $$('input[name="attendance"]', $('#rsvpForm')),
+    events: () => $$('input[name="events"]', $('#rsvpForm'))
+  };
+  let submitting = false;
+  const attVal = () => (F.att().find(r => r.checked) || {}).value;
+  const setErr = (k, msg = '') => { const el = $(`[data-err="${k}"]`); if (el) el.textContent = msg; };
+  const setStatus = msg => { F.status.textContent = msg; };
 
-  form.addEventListener('change', () => {
-    $('#detailFields').classList.toggle('is-hidden', attVal() === 'No');
-  });
+  function toggleDetails() {
+    const no = attVal() === 'No';
+    F.details.classList.toggle('is-hidden', no);
+    F.guests.disabled = no; F.events().forEach(c => (c.disabled = no));
+  }
+  F.att().forEach(r => r.addEventListener('change', toggleDetails));
 
   function validate() {
     ['name', 'attendance', 'guests', 'events'].forEach(k => setErr(k));
-    let ok = true;
-    if (form.name.value.trim().length < 2) { setErr('name', 'Please enter your name.'); ok = false; }
-    if (!attVal()) { setErr('attendance', 'Please choose Yes or No.'); ok = false; }
+    const bad = [];
+    if (F.name.value.trim().length < 2) { setErr('name', 'Please enter your name.'); bad.push(F.name); }
+    if (!attVal()) { setErr('attendance', 'Please choose Yes or No.'); bad.push(F.att()[0]); }
     if (attVal() === 'Yes') {
-      const g = Number(form.guests.value);
-      if (!Number.isInteger(g) || g < 1 || g > 10) { setErr('guests', 'Enter a number between 1 and 10.'); ok = false; }
-      if (!$$('input[name="events"]:checked', form).length) { setErr('events', 'Select at least one event.'); ok = false; }
+      const g = Number(F.guests.value);
+      if (!Number.isInteger(g) || g < 1 || g > 10) { setErr('guests', 'Enter a whole number from 1 to 10.'); bad.push(F.guests); }
+      if (!F.events().some(c => c.checked)) { setErr('events', 'Select at least one event.'); bad.push(F.events()[0]); }
     }
-    return ok;
+    if (bad.length) bad[0].focus();
+    return bad.length === 0;
   }
 
   async function submitRSVP(data) {
-    if (!CONFIG.RSVP_ENDPOINT) return { sent: false, reason: 'no-backend' };
-    const res = await fetch(CONFIG.RSVP_ENDPOINT, {
-      method: 'POST', redirect: 'follow',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(data)
-    });
-    const text = await res.text();
-    let out;
-    try { out = JSON.parse(text); }
-    catch (_) { throw new Error('Endpoint did not return JSON. Check that the Apps Script is deployed with access set to "Anyone". Response began: ' + text.slice(0, 80)); }
-    if (!out.ok) throw new Error('Endpoint rejected the data: ' + (out.error || 'unknown'));
-    return { sent: true };
+    if (!CONFIG.RSVP_ENDPOINT) { const e = new Error('no-backend'); e.code = 'NO_BACKEND'; throw e; }
+    const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), CONFIG.RSVP_TIMEOUT_MS);
+    try {
+      // text/plain avoids a CORS preflight, which Apps Script web apps do not answer
+      const res = await fetch(CONFIG.RSVP_ENDPOINT, { method: 'POST', redirect: 'follow', signal: ctrl.signal, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) });
+      let out = null;
+      try { out = JSON.parse(await res.text()); } catch (_) {}
+      if (!res.ok || !out) { const e = new Error('Bad response'); e.code = 'BAD_RESPONSE'; throw e; }
+      if (out.ok !== true) { const e = new Error(out.error || 'Rejected'); e.code = 'REJECTED'; throw e; }
+      return true; // success only when the backend itself says ok:true
+    } finally { clearTimeout(t); }
   }
 
-  form.addEventListener('submit', async e => {
+  F.form.addEventListener('submit', async e => {
     e.preventDefault();
-    status.textContent = '';
-    if (form.website.value) return; // honeypot
-    if (!validate()) { status.textContent = 'Please fix the highlighted fields.'; return; }
+    if (submitting) return;
+    if (F.hp.value) return; // honeypot
+    setStatus('');
+    if (!validate()) { setStatus('Please check the highlighted fields.'); return; }
     const yes = attVal() === 'Yes';
     const data = {
-      name: form.name.value.trim(), attendance: attVal(),
-      guests: yes ? Number(form.guests.value) : 0,
-      events: yes ? $$('input[name="events"]:checked', form).map(i => i.value) : [],
-      message: form.message.value.trim(), submittedAt: new Date().toISOString()
+      id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)),
+      name: F.name.value.trim(), attendance: attVal(),
+      guests: yes ? Number(F.guests.value) : 0,
+      events: yes ? F.events().filter(c => c.checked).map(c => c.value) : [],
+      message: F.wishes.value.trim(), submittedAt: new Date().toISOString()
     };
+    submitting = true; F.btn.disabled = true; F.btn.textContent = 'Sending…'; F.form.setAttribute('aria-busy', 'true');
     try {
-      const r = await submitRSVP(data);
-      if (!r.sent) { status.textContent = 'RSVP delivery is not connected yet, so your response has not been sent. Please confirm directly with the families.'; return; }
-      status.textContent = 'Thank you. Your RSVP has been received.';
-      form.reset(); $('#detailFields').classList.remove('is-hidden');
+      await submitRSVP(data);
+      setStatus('Thank you. Your RSVP has been received.');
+      F.form.reset(); F.guests.value = 1; toggleDetails();
     } catch (err) {
       console.error('RSVP error:', err);
-      status.textContent = 'Your RSVP could not be sent. Please try again in a moment.';
+      if (err.code === 'NO_BACKEND') setStatus('RSVP is not connected yet, so your response has not been sent.');
+      else if (err.name === 'AbortError') setStatus('This is taking too long, so your RSVP is not confirmed. Please try again.');
+      else if (err.code === 'REJECTED') setStatus('Your RSVP was not accepted. Please check your details and try again.');
+      else setStatus('We could not confirm your RSVP. Please check your connection and try again.');
+    } finally {
+      submitting = false; F.btn.disabled = false; F.btn.textContent = 'Send RSVP'; F.form.removeAttribute('aria-busy');
     }
   });
 
   /* ---------- SHARE ---------- */
   $('#shareBtn').addEventListener('click', async () => {
-    const out = $('#shareStatus'); const url = location.href.split('#')[0];
+    const out = $('#shareStatus'), url = location.href.split('#')[0];
     try {
       if (navigator.share) { await navigator.share({ ...CONFIG.SHARE, url }); return; }
-      await navigator.clipboard.writeText(url);
-      out.textContent = 'Invitation link copied.';
+      await navigator.clipboard.writeText(url); out.textContent = 'Invitation link copied.';
     } catch (err) {
       if (err && err.name === 'AbortError') return;
       const t = document.createElement('textarea'); t.value = url; document.body.appendChild(t); t.select();
@@ -214,20 +271,13 @@
       t.remove();
     }
   });
-
   $('#toTop').addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); });
 
-  /* ---------- MUSIC (starts only after a tap: the opening button or the toggle) ---------- */
+  /* ---------- MUSIC (only after a tap) ---------- */
   const mBtn = $('#musicBtn'), audio = $('#bgMusic');
+  const paint = on => { mBtn.setAttribute('aria-pressed', String(on)); mBtn.setAttribute('aria-label', on ? 'Pause music' : 'Play music'); };
   function setMusic(on) {
-    if (!CONFIG.MUSIC_SRC) return;
-    if (on) {
-      audio.play().then(() => paint(true)).catch(() => paint(false));
-    } else { audio.pause(); paint(false); }
-  }
-  function paint(on) {
-    mBtn.setAttribute('aria-pressed', String(on));
-    mBtn.setAttribute('aria-label', on ? 'Pause music' : 'Play music');
+    if (on) audio.play().then(() => paint(true)).catch(() => paint(false)); else { audio.pause(); paint(false); }
   }
   if (CONFIG.MUSIC_SRC) {
     audio.src = CONFIG.MUSIC_SRC; audio.volume = 0.6; mBtn.hidden = false;
