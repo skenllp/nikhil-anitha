@@ -33,3 +33,8 @@
 - WhatsApp preview: re-share after deploy (WhatsApp caches previews).
 - Fonts and GSAP load from CDNs: check first paint on slow mobile data.
 - Confirm end times with the families if you want exact calendar durations.
+
+## Photos added
+- Groom and bride portraits (arched frames) in "Two Hearts, One Promise".
+- "A Few of Our Favourite Moments": four-photo staggered gallery with a keyboard/swipe lightbox. The lantern photo was a gallery screenshot; its app menu bars were cropped off.
+- Optimised WebP copies in assets/ (portraits about 80-110 KB, gallery thumbnails about 35-95 KB, full views about 100-310 KB). Originals are kept in assets/photos/.

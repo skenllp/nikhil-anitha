@@ -258,6 +258,24 @@
     }
   });
 
+  /* ---------- PHOTO LIGHTBOX ---------- */
+  const lb = $('#lightbox'), lbImg = $('#lbImg'), shots = $$('.mshot');
+  let cur = 0, tx = 0;
+  function showShot(i) {
+    cur = (i + shots.length) % shots.length;
+    lbImg.src = shots[cur].dataset.full;
+    lbImg.alt = $('img', shots[cur]).alt;
+  }
+  shots.forEach((s, i) => s.addEventListener('click', () => { showShot(i); lb.showModal(); document.documentElement.style.overflow = 'hidden'; }));
+  $('.lb-close').addEventListener('click', () => lb.close());
+  $('.lb-prev').addEventListener('click', () => showShot(cur - 1));
+  $('.lb-next').addEventListener('click', () => showShot(cur + 1));
+  lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+  lb.addEventListener('close', () => { document.documentElement.style.overflow = ''; lbImg.removeAttribute('src'); });
+  lb.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') showShot(cur - 1); if (e.key === 'ArrowRight') showShot(cur + 1); });
+  lb.addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => { const d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 50) showShot(cur + (d < 0 ? 1 : -1)); }, { passive: true });
+
   /* ---------- SHARE ---------- */
   $('#shareBtn').addEventListener('click', async () => {
     const out = $('#shareStatus'), url = location.href.split('#')[0];
