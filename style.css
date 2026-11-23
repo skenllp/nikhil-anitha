@@ -58,9 +58,11 @@ section{position:relative;padding:var(--sp) var(--pad)}
 .hero__line{width:clamp(80px,22vw,140px);margin:clamp(10px,2svh,22px) auto}
 .hero__theme{font:italic 400 clamp(15px,4vw,22px)/1.3 var(--serif-names);letter-spacing:.18em;text-indent:.18em;text-transform:uppercase;text-shadow:0 0 14px rgba(255,248,232,.95)}
 .hero__date{margin-top:clamp(6px,1.2svh,12px);font:500 clamp(.7rem,2.6vw,.9rem)/1.4 var(--sans);letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;text-shadow:0 0 12px rgba(255,248,232,.95)}
-.scroll-ind{position:absolute;left:50%;bottom:max(10px,env(safe-area-inset-bottom));z-index:3;width:44px;height:48px;transform:translateX(-50%);display:grid;place-items:center}
-.scroll-ind span{width:1px;height:30px;background:var(--gold-d);transform-origin:top;animation:drip 2.4s ease-in-out infinite}
-@keyframes drip{0%{transform:scaleY(0);opacity:1}60%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+.scroll-ind{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom));z-index:3;width:46px;height:46px;transform:translateX(-50%);display:grid;place-items:center;border:1px solid var(--gold-d);border-radius:50%;background:rgba(255,248,232,.7);color:var(--gold-d);transition:background .3s,color .3s}
+.scroll-ind:hover,.scroll-ind:focus-visible{background:var(--gold-d);color:#fff8e8}
+.scroll-ind svg{width:20px;height:20px;animation:nudge 1.8s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
+@media (prefers-reduced-motion:reduce){.scroll-ind svg{animation:none}}
 @media (min-aspect-ratio:1/1){ /* desktop & landscape: whole artwork shown, soft blurred sides */
   .hero__bg .hero__img{object-fit:contain}
   .hero__content{top:14svh;bottom:30svh}

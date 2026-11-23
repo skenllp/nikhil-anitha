@@ -181,7 +181,8 @@
     setTimeout(() => URL.revokeObjectURL(url), 3000);
   });
 
-  /* ---------- RSVP ---------- */
+  /* ---------- RSVP (skipped while the RSVP section is commented out) ---------- */
+  if ($('#rsvpForm')) {
   const F = {
     form: $('#rsvpForm'), name: $('#guestName'), guests: $('#guestCount'), wishes: $('#wishes'),
     hp: $('#hpField'), details: $('#detailFields'), btn: $('#rsvpBtn'), status: $('#formStatus'),
@@ -257,6 +258,7 @@
       submitting = false; F.btn.disabled = false; F.btn.textContent = 'Send RSVP'; F.form.removeAttribute('aria-busy');
     }
   });
+  }
 
   /* ---------- PHOTO LIGHTBOX ---------- */
   const lb = $('#lightbox'), lbImg = $('#lbImg'), shots = $$('.mshot');
