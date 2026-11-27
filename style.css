@@ -58,8 +58,8 @@ section{position:relative;padding:var(--sp) var(--pad)}
 .hero__line{width:clamp(80px,22vw,140px);margin:clamp(10px,2svh,22px) auto}
 .hero__theme{font:italic 400 clamp(15px,4vw,22px)/1.3 var(--serif-names);letter-spacing:.18em;text-indent:.18em;text-transform:uppercase;text-shadow:0 0 14px rgba(255,248,232,.95)}
 .hero__date{margin-top:clamp(6px,1.2svh,12px);font:500 clamp(.7rem,2.6vw,.9rem)/1.4 var(--sans);letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;text-shadow:0 0 12px rgba(255,248,232,.95)}
-.hero__scroll{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom));z-index:3;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px}
-.hero__scroll-text{font:400 clamp(.68rem,2vw,.78rem)/1.2 var(--sans);letter-spacing:.28em;text-indent:.28em;text-transform:uppercase;color:var(--gold-d);text-shadow:0 0 10px rgba(255,248,232,.9);opacity:.9}
+.hero__scroll{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom));z-index:3;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px}
+.hero__scroll-text{font:500 clamp(.75rem,2.2vw,.88rem)/1.2 var(--sans);letter-spacing:.32em;text-indent:.32em;text-transform:uppercase;color:var(--ink);background:rgba(255,248,232,.85);padding:8px 20px;border-radius:999px;border:1px solid var(--gold-d);backdrop-filter:blur(8px)}
 .scroll-ind{position:static;width:46px;height:46px;transform:none;display:grid;place-items:center;border:1px solid var(--gold-d);border-radius:50%;background:rgba(255,248,232,.7);color:var(--gold-d);transition:background .3s,color .3s}
 .scroll-ind:hover,.scroll-ind:focus-visible{background:var(--gold-d);color:#fff8e8}
 .scroll-ind svg{width:20px;height:20px;animation:nudge 1.8s ease-in-out infinite}
