@@ -93,36 +93,44 @@ section{position:relative;padding:var(--sp) var(--pad)}
 .fam__names{font:400 clamp(26px,3.6vw,38px)/1.25 var(--serif-names);margin-bottom:16px}
 .fam__names i{display:block;font-size:.6em;color:var(--gold-d);line-height:1.5}
 
-/* events */
-.events{background:linear-gradient(var(--ivory),var(--cream))}
-.events__head{padding:var(--sp) var(--pad) clamp(24px,4vw,48px)}
-.events__lede{font:italic 400 clamp(19px,2.6vw,24px) var(--serif-names);color:#5a615c}
-.chapter{padding:clamp(56px,9vw,112px) var(--pad);position:relative}
-.chapter--engage{background:linear-gradient(var(--cream),#f4ecdb)}
-.chapter--chantham{background:linear-gradient(#f4ecdb,var(--warm))}
-.chapter--wedding{background:linear-gradient(var(--warm),var(--ivory))}
+/* Celebration palette + sheet radius, scoped so nothing else on the site changes */
+.events{--r:clamp(28px,6vw,64px);--hair:rgba(166,98,104,.45);--gold-l:#E8CE8D;--muted:#6B4A57;--magenta:#C41A4F;--saffron:#E9A818;--rose:#9A4A5C}
+/* events: each chapter takes the mood of its own video, stacked as rounded sheets */
+.events{background:var(--ivory)}
+.events__head{padding:var(--sp) var(--pad) clamp(32px,5vw,56px)}
+.events__lede{font:italic 400 clamp(19px,2.6vw,24px) var(--serif-names);color:var(--muted)}
+.chapter{position:relative;margin-top:calc(var(--r) * -1);padding:clamp(56px,9vw,112px) var(--pad) calc(clamp(56px,9vw,112px) + var(--r));border-radius:var(--r) var(--r) 0 0;color:var(--c-text);--frame-line:var(--hair);--frame-shadow:none}
+.chapter:first-of-type{margin-top:0}
 .chapter__in{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1fr);gap:clamp(32px,7vw,110px);align-items:center}
 .chapter--flip .chapter__media{order:2}
-.chapter__day{display:flex;align-items:baseline;gap:.5em;color:var(--gold-d);margin-bottom:6px}
+.chapter__day{display:flex;align-items:baseline;gap:.5em;color:var(--c-accent);margin-bottom:6px}
 .chapter__day b{font:300 clamp(72px,12vw,120px)/.85 var(--serif-names)}
 .chapter__day span{font:italic 400 clamp(18px,2.4vw,24px) var(--serif-names)}
-.chapter__title{font:400 clamp(28px,4.6vw,42px)/1.2 var(--serif-title);margin-bottom:12px;text-wrap:balance}
+.chapter__title{font:400 clamp(28px,4.6vw,42px)/1.2 var(--serif-title);margin-bottom:12px;text-wrap:balance;color:var(--c-title)}
 .chapter__when{font:500 clamp(19px,2.4vw,23px)/1.5 var(--serif-names);letter-spacing:.04em;margin-bottom:18px}
 .chapter__desc{font:italic 400 clamp(19px,2.5vw,24px)/1.55 var(--serif-names);margin-bottom:14px;max-width:30em}
-.chapter__extra{margin-bottom:26px;color:#5a615c}
+.chapter__extra{margin-bottom:26px;color:var(--c-muted)}
 .chapter__desc:last-of-type{margin-bottom:28px}
-.frame{position:relative;overflow:hidden;width:100%;margin-inline:auto;background:#e9dfc8;outline:1px solid rgba(168,143,92,.55);outline-offset:10px}
-.frame video,.frame img{width:100%;height:100%;object-fit:cover}
-.frame--arch{aspect-ratio:3/5;max-width:360px;border-radius:999px 999px 8px 8px}
-.frame--glow{aspect-ratio:4/5;max-width:400px;border-radius:14px}
-.frame--glow img{object-position:center 88%;animation:kb 30s ease-in-out infinite alternate;transform-origin:30% 60%}
-.frame--tall{aspect-ratio:9/16;max-width:300px;border-radius:22px;box-shadow:0 18px 44px rgba(39,44,41,.1)}
-.frame--tall video{object-fit:contain;background:#efe3cc}
-@keyframes kb{from{transform:scale(1)}to{transform:scale(1.05)}}
-.flame{position:absolute;left:8%;top:38%;width:30%;height:22%;background:radial-gradient(ellipse at 50% 55%,rgba(255,214,120,.5),transparent 62%);mix-blend-mode:screen;animation:flick 3.2s ease-in-out infinite alternate;pointer-events:none}
-.sheen{position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,244,214,.22) 50%,transparent 60%);background-size:250% 100%;animation:sheen 11s ease-in-out infinite;pointer-events:none}
-@keyframes flick{0%{opacity:.35;transform:scale(.96)}100%{opacity:.85;transform:scale(1.04)}}
-@keyframes sheen{0%,35%{background-position:130% 0}75%,100%{background-position:-30% 0}}
+.chapter .btn{border-color:var(--c-accent);color:var(--c-text)}
+.chapter .btn:hover{background:var(--c-accent);border-color:var(--c-accent);color:var(--c-on)}
+
+/* 1. Engagement: black and gold */
+.chapter--engage{--c-text:#F4E9D8;--c-muted:#C9BBA3;--c-accent:var(--gold-l);--c-on:#0E0703;--c-title:#FFF6E4;
+  --frame-line:rgba(232,206,141,.5);--frame-shadow:0 0 70px rgba(201,159,89,.28),0 28px 60px rgba(0,0,0,.55);
+  background:radial-gradient(60% 50% at 30% 45%,rgba(201,159,89,.20),transparent 70%),linear-gradient(#0E0703,#150C06)}
+/* 2. Chanthamcharthal: bright cream, magenta and saffron */
+.chapter--chantham{--c-text:#3B1A2B;--c-muted:#7A5565;--c-accent:var(--magenta);--c-on:#fff;--c-title:#3B1A2B;
+  --frame-line:rgba(196,26,79,.35);--frame-shadow:0 26px 56px rgba(196,26,79,.20),0 6px 18px rgba(233,168,24,.18);
+  background:radial-gradient(55% 45% at 75% 40%,rgba(233,168,24,.16),transparent 70%),linear-gradient(#FFFBF3,#FFF2DC)}
+/* 3. Wedding: black and crimson */
+.chapter--wedding{--c-text:#F7E6E8;--c-muted:#D1AAB0;--c-accent:#EBA3AD;--c-on:#14080C;--c-title:#FFF3F4;
+  --frame-line:rgba(235,163,173,.5);--frame-shadow:0 0 70px rgba(168,28,52,.38),0 28px 60px rgba(0,0,0,.6);
+  background:radial-gradient(60% 50% at 30% 45%,rgba(168,28,52,.28),transparent 70%),linear-gradient(#12060A,#1A0A10)}
+
+.frame{position:relative;overflow:hidden;width:100%;max-width:clamp(250px,34vw,320px);aspect-ratio:9/16;margin-inline:auto;border-radius:22px;background:#111;outline:1px solid var(--frame-line);outline-offset:10px;box-shadow:var(--frame-shadow)}
+.frame video{width:100%;height:100%;object-fit:cover;cursor:pointer;transform:scale(1.01)}
+
+.chapter--wedding{padding-bottom:clamp(56px,9vw,112px)}
 
 /* save the date */
 .std{overflow:hidden;min-height:min(100svh,780px);display:grid;align-items:center;background:#f4e9d6}
@@ -180,11 +188,11 @@ textarea{resize:vertical}
 @media (max-width:760px){
   .duo{grid-template-columns:1fr;gap:20px}
   .vline{width:70px;height:1px;justify-self:center;background:linear-gradient(90deg,transparent,var(--gold-d),transparent)}
-  .chapter__in{grid-template-columns:1fr;text-align:center;gap:44px}
+  .chapter__in{grid-template-columns:1fr;text-align:center;gap:48px}
   .chapter--flip .chapter__media{order:0}
   .chapter__day{justify-content:center}
   .chapter__desc{margin-inline:auto}
-  .frame{outline-offset:8px}
+  .frame{outline-offset:8px;max-width:min(300px,78vw)}
   .venues__grid{grid-template-columns:1fr;gap:18px}
   .vcard+.vcard{border-left:0;border-top:1px solid rgba(168,143,92,.45);padding-top:30px}
   .final__actions .btn{flex:1 1 200px}
